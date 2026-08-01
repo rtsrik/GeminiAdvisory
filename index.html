@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Advisory | Product Strategy, BA & Financial Compliance</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Light Theme Palette */
+            --bg-body: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-subtle: #f1f5f9;
+            --border-color: #e2e8f0;
+            
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-light: #64748b;
+            
+            --brand-primary: #0284c7;    /* Deep sky blue */
+            --brand-primary-hover: #0369a1;
+            --brand-accent: #059669;     /* Emerald green highlight */
+            --brand-accent-bg: #ecfdf5;
+            
+            --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+            --header-bg: rgba(255, 255, 255, 0.85);
+            --input-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Palette */
+            --bg-body: #0b0f17;
+            --bg-surface: #111827;
+            --bg-subtle: #1f2937;
+            --border-color: #1f2937;
+            
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --text-light: #6b7280;
+            
+            --brand-primary: #38bdf8;
+            --brand-primary-hover: #0ea5e9;
+            --brand-accent: #34d399;
+            --brand-accent-bg: rgba(52, 211, 153, 0.1);
+            
+            --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+            --header-bg: rgba(11, 15, 23, 0.85);
+            --input-bg: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4, .brand-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Navigation Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--header-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .brand-logo-svg {
+            width: 32px;
+            height: 32px;
+            fill: none;
+        }
+
+        .brand-text {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .brand-text span {
+            color: var(--brand-primary);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--brand-primary);
+        }
+
+        /* Controls / Theme Toggle Switch */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .theme-toggle-btn {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--brand-primary);
+        }
+
+        .btn-primary {
+            background-color: var(--brand-primary);
+            color: #ffffff !important;
+            padding: 0.65rem 1.3rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--brand-primary-hover);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 2rem 4rem;
+            max-width: 1050px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--brand-accent-bg);
+            color: var(--brand-accent);
+            padding: 0.35rem 0.9rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            color: var(--text-main);
+            margin-bottom: 1.25rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        /* Offerings / Services Section */
+        .services-section {
+            background-color: var(--bg-subtle);
+            padding: 5rem 2rem;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            padding: 2.25rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            border-color: var(--brand-primary);
+            transform: translateY(-2px);
+        }
+
+        .card-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            color: var(--brand-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-list {
+            list-style: none;
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+        .card-list li {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-list li::before {
+            content: "✓";
+            color: var(--brand-accent);
+            font-weight: bold;
+        }
+
+        /* Case Studies Section */
+        .case-studies-section {
+            padding: 6rem 2rem;
+        }
+
+        .cs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .cs-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cs-category {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--brand-accent);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .cs-card h3 {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            line-height: 1.35;
+        }
+
+        .cs-metric {
+            background-color: var(--brand-accent-bg);
+            border-left: 3px solid var(--brand-accent);
+            padding: 0.75rem 1rem;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 1.25rem;
+        }
+
+        .cs-metric-value {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--brand-accent);
+        }
+
+        .cs-metric-label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .cs-body {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* About Section */
+        .about-section {
+            background-color: var(--bg-subtle);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 5rem 2rem;
+        }
+
+        .about-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-surface);
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        .about-wrapper h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 1.25rem;
+        }
+
+        .about-wrapper p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--brand-primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Contact & Form Section */
+        .contact-section {
+            padding: 6rem 2rem;
+        }
+
+        .contact-wrapper {
+            max-width: 750px;
+            margin: 0 auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .contact-header h2 {
+            font-size: 2rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .form-submit-btn {
+            grid-column: span 2;
+            margin-top: 1rem;
+            width: 100%;
+            justify-content: center;
+            padding: 0.85rem;
+            font-size: 1rem;
+        }
+
+        .email-direct-link {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.88rem;
+            color: var(--text-light);
+        }
+
+        .email-direct-link a {
+            color: var(--brand-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            background: var(--bg-body);
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .stats-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .form-submit-btn { grid-column: span 1; }
+            header { padding: 1rem; }
+            nav { display: none; }
+            .contact-wrapper { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Nav -->
+    <header>
+        <a href="#" class="brand-container">
+            <!-- Gemini Logo -->
+            <svg class="brand-logo-svg" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="14" cy="20" r="10" stroke="currentColor" stroke-width="3" style="stroke: var(--brand-primary);"/>
+                <circle cx="26" cy="20" r="10" stroke="currentColor" stroke-width="3" style="stroke: var(--brand-accent);"/>
+                <path d="M 20 10 C 22 14, 22 26, 20 30" stroke="currentColor" stroke-width="2.5" style="stroke: var(--text-main);"/>
+            </svg>
+            <span class="brand-text">GEMINI <span>ADVISORY</span></span>
+        </a>
+
+        <div class="nav-right">
+            <nav>
+                <a href="#offerings">Offerings</a>
+                <a href="#case-studies">Case Studies</a>
+                <a href="#about">About</a>
+            </nav>
+            
+            <!-- Dark / Light Theme Toggle -->
+            <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
+                <span id="themeIcon">🌙</span>
+                <span id="themeText">Dark</span>
+            </button>
+
+            <!-- Single Header CTA -->
+            <a href="#contact" class="btn-primary">Contact Us</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span>◆</span> Advisory & Execution Practice
+        </div>
+        <h1>Product Strategy, Business Analysis & Financial Compliance</h1>
+        <p>Aligning complex regulatory mandates, enterprise platforms, and operational models to drive sustainable growth for financial institutions and digital platforms.</p>
+    </section>
+
+    <!-- Offerings Section -->
+    <section id="offerings" class="services-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Core Advisory Practice</h2>
+                <p class="section-subtitle">Structured, hands-on capabilities designed for high-precision delivery and regulatory discipline.</p>
+            </div>
+
+            <div class="grid">
+                <!-- Practice 1: Product Strategy -->
+                <div class="card">
+                    <div>
+                        <div class="card-tag">Practice 01</div>
+                        <h3>Product Strategy & Vision</h3>
+                        <p>Translating institutional requirements, policy mandates, and ecosystem needs into scalable, implementation-ready digital platform roadmaps.</p>
+                    </div>
+                    <ul class="card-list">
+                        <li>DPI & GovTech Platform Strategy</li>
+                        <li>Roadmap & Feature Backlog Ownership</li>
+                        <li>Stakeholder & Multilateral Alignment</li>
+                    </ul>
+                </div>
+
+                <!-- Practice 2: Business Analysis -->
+                <div class="card">
+                    <div>
+                        <div class="card-tag">Practice 02</div>
+                        <h3>Business Analysis & Delivery</h3>
+                        <p>Architecting end-to-end execution frameworks. Designing target operating models, mapping business workflows, and unifying cross-functional teams.</p>
+                    </div>
+                    <ul class="card-list">
+                        <li>Target Operating Model (TOM) Design</li>
+                        <li>Agile Delivery & Backlog Refinement</li>
+                        <li>Workflow, Process & IAM Optimization</li>
+                    </ul>
+                </div>
+
+                <!-- Practice 3: Financial Compliance & Risk -->
+                <div class="card">
+                    <div>
+                        <div class="card-tag">Practice 03</div>
+                        <h3>Financial Compliance & Risk</h3>
+                        <p>Operationalizing audit-ready compliance frameworks, AML/KYC workflows, and quality assurance operating models across regulated environments.</p>
+                    </div>
+                    <ul class="card-list">
+                        <li>AIF & WealthTech Onboarding Setup</li>
+                        <li>AML/KYC & Financial Crime Controls</li>
+                        <li>Regulatory Audit Readiness (SEBI, RBI, Global)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies / Proven Outcomes Section -->
+    <section id="case-studies" class="case-studies-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Client Outcomes & Industry Impact</h2>
+                <p class="section-subtitle">A track record of driving operational efficiency, regulatory compliance, and platform adoption.</p>
+            </div>
+
+            <div class="cs-grid">
+                <!-- Case Study 1 -->
+                <div class="cs-card">
+                    <div class="cs-category">WealthTech & Asset Management</div>
+                    <h3>Alternative Investment Fund (AIF) Onboarding Optimization</h3>
+                    <div class="cs-metric">
+                        <div class="cs-metric-value">85%+ Cycle-Time Reduction</div>
+                        <div class="cs-metric-label">Accelerated investor onboarding from weeks to days</div>
+                    </div>
+                    <p class="cs-body">
+                        Designed and deployed a modern investor onboarding architecture for a SEBI-registered Category III AIF. Streamlined KYC/AML verification protocols and established regulatory compliance operations across domestic and offshore fund structures.
+                    </p>
+                </div>
+
+                <!-- Case Study 2 -->
+                <div class="cs-card">
+                    <div class="cs-category">Enterprise Risk & Compliance</div>
+                    <h3>Global Financial Services Quality Assurance Operating Model</h3>
+                    <div class="cs-metric">
+                        <div class="cs-metric-value">In-House QA Transition</div>
+                        <div class="cs-metric-label">Scaled a 22-member dedicated compliance QA team</div>
+                    </div>
+                    <p class="cs-body">
+                        Engineered the target operating model to transition critical compliance and QA activities from third-party vendors into a streamlined in-house structure. Established robust governance frameworks, KPI dashboards, and control testing standards.
+                    </p>
+                </div>
+
+                <!-- Case Study 3 -->
+                <div class="cs-card">
+                    <div class="cs-category">GovTech & Public Infrastructure</div>
+                    <h3>Open-Source DPI Platform Product Architecture</h3>
+                    <div class="cs-metric">
+                        <div class="cs-metric-value">Multilateral Platform Adoption</div>
+                        <div class="cs-metric-label">Facilitated country-level pilot and national deployment agreements</div>
+                    </div>
+                    <p class="cs-body">
+                        Provided end-to-end product leadership for a global Digital Public Infrastructure (DPI) platform. Harmonized government policy objectives, multilateral donor needs, and technical implementation requirements to support international expansion and country-level rollouts.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Firm-Focused About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-wrapper">
+                <h2>About Gemini Advisory</h2>
+                <p>Gemini Advisory is an execution-led consulting firm based in Bangalore, India. We partner with financial institutions, asset managers, and enterprise platforms to solve complex operational, product, and regulatory challenges.</p>
+                <p>Our practice combines deep domain knowledge in financial services and risk management with modern product management methodologies. We focus on bridge-building—connecting strategic vision with seamless operational execution.</p>
+                
+                <div class="stats-grid">
+                    <div>
+                        <div class="stat-number">12+ Years</div>
+                        <div class="stat-label">Industry Advisory Track Record</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">Regulated FIs</div>
+                        <div class="stat-label">Banking & AIF Expertise</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">End-to-End</div>
+                        <div class="stat-label">Strategy to Execution</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- In-Page Contact Form Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-header">
+                    <h2>Initiate an Engagement</h2>
+                    <p>Share your requirement below and our advisory team will connect with you shortly.</p>
+                </div>
+
+                <!-- Powered by Web3Forms (Behind-the-scenes routing to your email) -->
+                <form id="advisoryContactForm" action="https://api.web3forms.com/submit" method="POST">
+                    <!-- ENTER YOUR FREE ACCESS KEY FROM WEB3FORMS.COM IN VALUE BELOW -->
+                    <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY_HERE">
+                    <input type="hidden" name="subject" value="New Inquiry - Gemini Advisory Website">
+                    <input type="hidden" name="from_name" value="Gemini Advisory Contact Form">
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fullName">Full Name *</label>
+                            <input type="text" name="name" id="fullName" placeholder="e.g., Jane Doe" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="organization">Organization / Firm *</label>
+                            <input type="text" name="organization" id="organization" placeholder="e.g., Acme Capital / Tech Corp" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Work Email *</label>
+                            <input type="email" name="email" id="email" placeholder="jane@organization.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactNumber">Contact Phone / Mobile</label>
+                            <input type="tel" name="phone" id="contactNumber" placeholder="+91 98765 43210">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="engagementType">Primary Area of Interest</label>
+                            <select name="service_interest" id="engagementType">
+                                <option value="AIF / WealthTech Compliance">AIF / WealthTech Compliance & Onboarding Setup</option>
+                                <option value="Risk & QA Operating Model">Risk & QA Target Operating Model</option>
+                                <option value="Product Strategy & BA">Product Strategy & Business Analysis Advisory</option>
+                                <option value="General Query">General Advisory Query</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="issueDetails">Tell us about your challenge or engagement requirements *</label>
+                            <textarea name="message" id="issueDetails" rows="4" placeholder="Briefly describe your operational objectives, timeline, or key focus areas..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary form-submit-btn">Submit Advisory Request</button>
+                    </div>
+                </form>
+
+                <div class="email-direct-link">
+                    General Inquiries: <a href="mailto:contact@geminiadvisory.com">contact@geminiadvisory.com</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Gemini Advisory. All rights reserved. | Bangalore, India</p>
+    </footer>
+
+    <!-- JavaScript for Theme Switcher -->
+    <script>
+        // Theme Switcher Logic
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+
+        const currentTheme = localStorage.getItem('theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Light';
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light';
+            }
+        });
+    </script>
+</body>
+</html>
