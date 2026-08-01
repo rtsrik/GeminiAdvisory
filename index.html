@@ -787,11 +787,11 @@
                     <p>Share your requirement below and our advisory team will connect with you shortly.</p>
                 </div>
 
-                <!-- Clean Form handled via AJAX -->
                 <form id="advisoryContactForm">
                     <input type="hidden" name="access_key" value="c31e901d-6e6e-41b9-b090-29e4074ef74d">
                     <input type="hidden" name="subject" value="New Inquiry - Gemini Advisory Website">
                     <input type="hidden" name="from_name" value="Gemini Advisory Contact Form">
+                    <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
                     <div class="form-grid">
                         <div class="form-group">
@@ -897,16 +897,13 @@
             submitBtn.disabled = true;
 
             const formData = new FormData(contactForm);
-            const object = Object.fromEntries(formData);
-            const json = JSON.stringify(object);
+            
+            // Explicitly set Web3Forms AJAX options
+            formData.append('botcheck', '');
 
             fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: json
+                body: formData
             })
             .then(async (response) => {
                 let res = await response.json();
@@ -915,7 +912,7 @@
                     successModal.classList.add('active');
                     contactForm.reset();
                 } else {
-                    alert('Error: ' + res.message);
+                    alert('Error: ' + (res.message || 'Submission failed'));
                 }
             })
             .catch(error => {
