@@ -29,6 +29,7 @@
             --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
             --header-bg: rgba(255, 255, 255, 0.85);
             --input-bg: #ffffff;
+            --modal-overlay: rgba(15, 23, 42, 0.6);
         }
 
         [data-theme="dark"] {
@@ -50,6 +51,7 @@
             --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
             --header-bg: rgba(11, 15, 23, 0.85);
             --input-bg: #1f2937;
+            --modal-overlay: rgba(0, 0, 0, 0.8);
         }
 
         * {
@@ -517,6 +519,72 @@
             font-weight: 600;
         }
 
+        /* Confirmation Pop-up Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-overlay);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 56px;
+            height: 56px;
+            background-color: var(--brand-accent-bg);
+            color: var(--brand-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin: 0 auto 1.25rem;
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.75rem;
+            line-height: 1.5;
+        }
+
         footer {
             text-align: center;
             padding: 2rem;
@@ -719,14 +787,11 @@
                     <p>Share your requirement below and our advisory team will connect with you shortly.</p>
                 </div>
 
-                <!-- Powered by Web3Forms (Behind-the-scenes routing to your email) -->
-                <form id="advisoryContactForm" <form action="https://api.web3forms.com/submit" method="POST">
-                <input type="hidden" name="access_key" value="c31e901d-6e6e-41b9-b090-29e4074ef74d">
-                <input type="text" name="name" required>
-                <input type="email" name="email" required>
-                <textarea name="message" required></textarea>
-                <button type="submit">Submit</button>
-            </form>
+                <!-- Clean Form handled via AJAX -->
+                <form id="advisoryContactForm">
+                    <input type="hidden" name="access_key" value="c31e901d-6e6e-41b9-b090-29e4074ef74d">
+                    <input type="hidden" name="subject" value="New Inquiry - Gemini Advisory Website">
+                    <input type="hidden" name="from_name" value="Gemini Advisory Contact Form">
 
                     <div class="form-grid">
                         <div class="form-group">
@@ -764,7 +829,7 @@
                             <textarea name="message" id="issueDetails" rows="4" placeholder="Briefly describe your operational objectives, timeline, or key focus areas..." required></textarea>
                         </div>
 
-                        <button type="submit" class="btn-primary form-submit-btn">Submit Advisory Request</button>
+                        <button type="submit" id="submitBtn" class="btn-primary form-submit-btn">Submit Advisory Request</button>
                     </div>
                 </form>
 
@@ -775,12 +840,22 @@
         </div>
     </section>
 
+    <!-- Confirmation Pop-up Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content">
+            <div class="modal-icon">✓</div>
+            <h3>Inquiry Submitted</h3>
+            <p>Thank you for reaching out. Your engagement details have been received and our advisory team will be in touch shortly.</p>
+            <button class="btn-primary" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <p>&copy; 2026 Gemini Advisory. All rights reserved. | Bangalore, India</p>
     </footer>
 
-    <!-- JavaScript for Theme Switcher -->
+    <!-- JavaScript for Theme Switcher & AJAX Form Handling -->
     <script>
         // Theme Switcher Logic
         const themeToggleBtn = document.getElementById('themeToggle');
@@ -810,6 +885,51 @@
                 themeText.textContent = 'Light';
             }
         });
+
+        // AJAX Form Submission (No Redirect)
+        const contactForm = document.getElementById('advisoryContactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successModal = document.getElementById('successModal');
+
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(contactForm);
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
+            })
+            .then(async (response) => {
+                let res = await response.json();
+                if (response.status === 200) {
+                    // Show confirmation pop-up modal
+                    successModal.classList.add('active');
+                    contactForm.reset();
+                } else {
+                    alert('Error: ' + res.message);
+                }
+            })
+            .catch(error => {
+                alert('Something went wrong. Please try again.');
+            })
+            .then(() => {
+                submitBtn.textContent = 'Submit Advisory Request';
+                submitBtn.disabled = false;
+            });
+        });
+
+        function closeModal() {
+            successModal.classList.remove('active');
+        }
     </script>
 </body>
 </html>
